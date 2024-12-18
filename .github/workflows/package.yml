@@ -1,0 +1,34 @@
+name: Build and Publish iOS App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install Capacitor CLI
+      run: npm install @capacitor/cli
+
+    - name: Build PWA
+      run: npm run build
+
+    - name: Copy web assets to iOS
+      run: npx cap copy ios
+
+    - name: Open iOS project
+      run: npx cap open ios
